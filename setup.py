@@ -14,7 +14,11 @@ def install_liblockfile():
     # sys.prefix points into the venv
     C(f'./configure --prefix="{sys.prefix}"', cwd='liblockfile')
     C('make -j4', cwd='liblockfile')
-    C('make install', cwd='liblockfile')
+
+    # "make install" requires root privileges, even for a local install
+    # Instead we can just copy dotlockfile, since it's statically linked
+    # C('make install', cwd='liblockfile')
+    C(f'cp liblockfile/dotlockfile {sys.prefix}/bin')
     C('rm -rf liblockfile')
 
 

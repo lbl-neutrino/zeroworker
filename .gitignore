@@ -1,2 +1,4 @@
 /liblockfile
 __pycache__
+/build
+*.egg-info
