@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 
+from pathlib import Path
+import time
+
 import zmq
 
 from .base import ListReaderBase, ListWriterBase
@@ -15,7 +18,10 @@ class ZmqListReader(ListReaderBase):
 
         ctx = zmq.Context()
         self.sock = ctx.socket(zmq.REQ)
-        self.sock.connect(f'ipc://{sockdir}/{READER_SOCK_NAME}')
+        sockpath = Path(sockdir).joinpath(READER_SOCK_NAME)
+        while not sockpath.exists():
+            time.sleep(5)
+        self.sock.connect(f'ipc://{sockpath}')
 
     def __next__(self):
         self._check_timeout()
@@ -32,7 +38,10 @@ class ZmqListWriter(ListWriterBase):
 
         ctx = zmq.Context()
         self.sock = ctx.socket(zmq.PUSH)
-        self.sock.connect(f'ipc://{sockdir}/{WRITER_SOCK_NAME}')
+        sockpath = Path(sockdir).joinpath(WRITER_SOCK_NAME)
+        while not sockpath.exists():
+            time.sleep(5)
+        self.sock.connect(f'ipc://{sockpath}')
 
     def _do_put(self, line):
         self.sock.send_string(line)
