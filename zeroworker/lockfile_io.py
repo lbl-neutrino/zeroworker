@@ -43,12 +43,12 @@ class LockfileListReader(ListReaderBase):
 
     def _read_offset(self):
         try:
-            return int(open(self._offset_file()).read())
+            return int(open(self._offset_file).read())
         except FileNotFoundError:
             return 0
 
     def _write_offset(self, offset):
-        open(self._offset_file(), 'w').write(f'{offset}\n')
+        open(self._offset_file, 'w').write(f'{offset}\n')
 
     def _pull(self):
         self._check_timeout()
