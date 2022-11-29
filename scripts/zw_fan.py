@@ -67,18 +67,19 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('sockdir')
     ap.add_argument('infile')
-    ap.add_argument('-c', '--chunksize', type=int, default=32)
+    ap.add_argument('-I', '--input-chunksize', type=int, default=32)
+    ap.add_argument('-O', '--output-chunksize', type=int, default=1)
     ap.add_argument('-t', '--timeout', type=float, default=240, help='minutes')
     args = ap.parse_args()
 
     def serve_inbuf():
-        ib = InputBuffer(args.sockdir, args.infile, args.chunksize,
+        ib = InputBuffer(args.sockdir, args.infile, args.input_chunksize,
                          timeout_mins=args.timeout)
         ib.serve()
 
     def serve_outbuf():
         donefile = args.infile + '.done'
-        ob = OutputBuffer(args.sockdir, donefile, args.chunksize)
+        ob = OutputBuffer(args.sockdir, donefile, args.output_chunksize)
         ob.serve()
 
     Process(target=serve_inbuf).start()
