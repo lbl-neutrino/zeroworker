@@ -80,7 +80,7 @@ def main():
     ap.add_argument('infile')
     ap.add_argument('-I', '--input-chunksize', type=int, default=32)
     ap.add_argument('-O', '--output-chunksize', type=int, default=1)
-    ap.add_argument('-t', '--timeout', type=float, default=240, help='minutes')
+    ap.add_argument('-t', '--timeout', type=float, help='minutes')
     ap.add_argument('--immortal', action='store_true',
                     help='Stick around and wait for new input after draining it')
     args = ap.parse_args()
