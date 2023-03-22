@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 
 import os
+import sys
+import time
 
 from .base import ListReaderBase, ListWriterBase
 
@@ -46,9 +48,15 @@ class LockfileListReader(ListReaderBase):
             return int(open(self._offset_file).read())
         except FileNotFoundError:
             return 0
+        except ValueError:
+            print('WARNING: Invalid/empty offset file. This should not happen',
+                  file=sys.stderr)
+            time.sleep(60)
+            return self._read_offset()
 
     def _write_offset(self, offset):
-        open(self._offset_file, 'w').write(f'{offset}\n')
+        with open(self._offset_file, 'w') as f:
+            f.write(f'{offset}\n')
 
     def _pull(self):
         self._check_timeout()
