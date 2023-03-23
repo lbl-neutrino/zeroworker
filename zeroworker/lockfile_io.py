@@ -54,9 +54,12 @@ class LockfileListReader(ListReaderBase):
             time.sleep(60)
             return self._read_offset()
 
+    # https://stackoverflow.com/questions/3167494/how-often-does-python-flush-to-a-file
     def _write_offset(self, offset):
         with open(self._offset_file, 'w') as f:
             f.write(f'{offset}\n')
+            f.flush()
+        os.fsync()
 
     def _pull(self):
         self._check_timeout()
