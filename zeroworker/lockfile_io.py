@@ -59,7 +59,7 @@ class LockfileListReader(ListReaderBase):
         with open(self._offset_file, 'w') as f:
             f.write(f'{offset}\n')
             f.flush()
-        os.fsync()
+            os.fsync(f.fileno())
 
     def _pull(self):
         self._check_timeout()
